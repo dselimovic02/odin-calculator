@@ -7,13 +7,26 @@ const clear = document.querySelector("button#clear");
 const del = document.querySelector("button#delete");
 const equals = document.querySelector("button.equals");
 const dot = document.querySelector(".dot");
-const operation = {
+const operationSign = {
     add: '<i class="fa-solid fa-plus"></i>',
     subtract: '<i class="fa-solid fa-minus"></i>',
     multiply: '<i class="fa-solid fa-xmark"></i>',
     divide: '<i class="fa-solid fa-divide"></i>'
 };
+const operationExecute = {
+    add: (x, y) => x + y,
+    subtract: (x, y) => x - y,
+    multiply: (x, y) => x * y,
+    divide: (x, y) => {
+        console.log(y == 0);
+        if(y == 0){
+            return "Error";
+        }
+        return x / y;
+    }
+};
 
+let operation = '';
 numbers.forEach(number =>{
     number.addEventListener("click", () => {
         if(input.textContent.length < 9){
@@ -54,8 +67,10 @@ negative.addEventListener("click", () =>{
 });
 
 operators.forEach(operator => {
+    operation = '';
     operator.addEventListener("click", () => {
-        output.innerHTML = input.textContent + ` ${operation[operator.id]}`;
+        operation = operator.id;
+        output.innerHTML = input.textContent + ` ${operationSign[operation]}`;
         clearInput();
     });
 });
@@ -70,3 +85,16 @@ function clearAll(){
     clearInput();
     clearOutput();
 }
+
+equals.addEventListener("click", () =>{
+    let firstNum = parseFloat(output.textContent.replace(' ', ''));
+    let secondNum = parseFloat(input.textContent);
+    let result = operationExecute[operation](firstNum, secondNum);
+    console.log(result);
+    if(result != "Error")
+        result = Math.round((result + Number.EPSILON) * 100) / 100;
+
+    output.innerHTML = firstNum + ` ${operationSign[operation]} ` + secondNum + " = " + result;
+    input.textContent = result;
+    operation = '';
+});

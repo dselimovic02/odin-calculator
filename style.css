@@ -31,6 +31,7 @@ html{
     flex-direction: column;
     gap: 2rem;
     border-radius: 2rem;
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.3);
 }
 .buttons{
     display: flex;
